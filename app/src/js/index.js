@@ -38,11 +38,21 @@ var TestPage = {
             var nImg = ImgProcessUtil.parseReverseImg(img);
             _this.drawImg(nImg);
         });
+    },
+    testGray:function(){
+        var imgUrl = './src/img/test.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseGrayImg(img);
+            _this.drawImg(nImg);
+        });
     }
 }
 
 
 window.onload = function(){
     TestPage.init();
-    TestPage.testReverse();
+//    TestPage.testReverse();
+    TestPage.testGray();
 }

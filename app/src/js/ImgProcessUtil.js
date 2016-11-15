@@ -14,6 +14,10 @@ var ImgProcessUtil = {
     parseReverseImg:function(img){
         var imp = ImgProcess.create(img);
         return imp.reverse().createImg();
+    },
+    parseGrayImg:function(img){
+        var imp = ImgProcess.create(img);
+        return imp.gray().createImg();
     }
 };
 module.exports = ImgProcessUtil;
