@@ -54,6 +54,12 @@ gulp.task("js",function(cb){
         .pipe(gulp.dest(jsDestPath));
 });
 
+gulp.task("img",function(cb){
+    var cssDestPath = currentPath+'/src/img';
+    return gulp.src('app/src/img/*')
+        .pipe(gulp.dest(cssDestPath));
+});
+
 gulp.task("lib",function(){
     var libDestPath = currentPath+'/lib';
     gulp.src('bower_components/zepto/zepto.min.js')
@@ -95,6 +101,12 @@ gulp.task("clean_css",function(cb){
     return gulp.src(cleanPath)
         .pipe(vinylPaths(del));
 });
+gulp.task("clean_img",function(cb){
+    var cleanPath = currentPath+'/src/img/*';
+    return gulp.src(cleanPath)
+        .pipe(vinylPaths(del));
+});
+
 
 gulp.task("doc",function(cb){
     var config = require('./app/src/doc/jsdoc.json');
@@ -131,11 +143,11 @@ gulp.task('open_brower',['serve'],function(){
 gulp.task("publish",function(cb){
     currentPath =publishPath;
     devMode = false;
-    sequence('clean','lib','js','css','html')(cb);
+    sequence('clean','lib','js','css','img','html')(cb);
 });
 
 gulp.task("publish_webpack",function(cb){
-    sequence('clean','lib','js','css','html')(cb);
+    sequence('clean','lib','js','css','img','html')(cb);
 });
 
 gulp.task('serve',['publish_webpack','server_start','watch_dev']);

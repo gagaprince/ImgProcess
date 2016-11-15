@@ -4,16 +4,17 @@ var CanvasOperation = HClass.extend({
     canvas:null,
     domCanvas:null,
     ctx:null,
-    rect:null,
-    ctor:function(rect){
-        if(rect){
-            this.initCanvas(rect);
+    img:null,
+    ctor:function(img){
+        if(img){
+            this.img = img;
+            this.initCanvas(img);
         }
     },
-    initCanvas:function(rect){
+    initCanvas:function(img){
         this.canvas = $('<canvas></canvas>');
-        var width = rect.width;
-        var height = rect.height;
+        var width = img.width;
+        var height = img.height;
         this.canvas.css({
             "height":height+'px',
             "width":width+'px'
@@ -29,8 +30,21 @@ var CanvasOperation = HClass.extend({
         }
         //draw
         this.ctx.drawImage(img,0,0);
-        var rect = this.rect;
-        return ctx.getImageData(0,0,rect.width,rect.height);
+        var rect = this.img;
+        return this.ctx.getImageData(0,0,rect.width,rect.height);
+    },
+    operate:function(img){
+        if(!img){
+            img = this.img;
+        }
+        var imgData = this.createImageDataFromImg(img);
+        imgData = this.operateData(imgData);
+        var image = this.createImageFromImgData(imgData);
+        return image;
+    },
+    operateData:function(imgData){
+        console.log('need operate!');
+        return imgData;
     },
     createImageFromImgData:function(imgData){
         var ctx = this.ctx;
@@ -38,7 +52,14 @@ var CanvasOperation = HClass.extend({
         var canvas = this.domCanvas;
         var image = new Image();
         image.src = canvas.toDataURL("image/png");
+        this.destory();
         return image;
+    },
+    destory:function(){
+        this.canvas=null;
+        this.domCanvas=null;
+        this.ctx=null;
+        this.img=null;
     }
 });
 module.exports = CanvasOperation;
