@@ -46,6 +46,59 @@ var CanvasOperation = HClass.extend({
         console.log('need operate!');
         return imgData;
     },
+    /**
+     * matrix 的格式
+     * [
+     * a,b,c,d,e,
+     * f,g,h,i,j,
+     * k,l,m,n,o,
+     * p,q,r,s,t
+     * ]
+     * */
+    operateDataByMatrix:function(matrix,imgData){
+        var data = imgData.data;
+        for (var i=0;i<data.length;i+=4)
+        {
+            var R  = data[i];
+            var G  = data[i+1];
+            var B  = data[i+2];
+            var A  = data[i+3];
+            var I = 1;
+            var nowM = [
+                [R],[G],[B],[A],[1]
+            ]
+            var rm = this._matrixCheng(matrix,nowM);
+            data[i]=rm[0][0];
+            data[i+1]=rm[1][0];
+            data[i+2]=rm[2][0];
+            data[i+3]=rm[3][0];
+        }
+        return imgData;
+    },
+    //矩阵乘法
+    _matrixCheng:function(m1,m2){
+        if(m1[0].length!=m2.length){
+            throw "the two matrix cannot cheng!";
+            return [];
+        }
+        var rm = [];
+        for(var i=0;i<m1.length;i++){
+            var rmx = [];
+            for(var j=0;j<m2[0].length;i++){
+                var sum = 0;
+                for(var k=0;k<m1[0].length;k++){
+                    sum+=m1[0][k]*m2[k][j];
+                }
+                rmx.push(sum);
+            }
+            rm.push(rmx);
+        }
+        return rm;
+    },
+    /*_findMatrixValue:function(matrix,x,y){
+        var len = matrix[0].length;
+        return matrix[y][y*len+x];
+    },*/
     createImageFromImgData:function(imgData){
         var ctx = this.ctx;
         ctx.putImageData(imgData,0,0);
