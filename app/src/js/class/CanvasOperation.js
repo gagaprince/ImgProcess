@@ -57,17 +57,20 @@ var CanvasOperation = HClass.extend({
      * */
     operateDataByMatrix:function(matrix,imgData){
         var data = imgData.data;
+        //var i=0;
         for (var i=0;i<data.length;i+=4)
         {
             var R  = data[i];
             var G  = data[i+1];
             var B  = data[i+2];
             var A  = data[i+3];
-            var I = 1;
+            var I = 255;
             var nowM = [
-                [R],[G],[B],[A],[1]
+                [R],[G],[B],[A],[I]
             ]
             var rm = this._matrixCheng(matrix,nowM);
+            //console.log(nowM);
+            //console.log(rm);
             data[i]=rm[0][0];
             data[i+1]=rm[1][0];
             data[i+2]=rm[2][0];
@@ -84,10 +87,10 @@ var CanvasOperation = HClass.extend({
         var rm = [];
         for(var i=0;i<m1.length;i++){
             var rmx = [];
-            for(var j=0;j<m2[0].length;i++){
+            for(var j=0;j<m2[0].length;j++){
                 var sum = 0;
                 for(var k=0;k<m1[0].length;k++){
-                    sum+=m1[0][k]*m2[k][j];
+                    sum+=m1[i][k]*m2[k][j];
                 }
                 rmx.push(sum);
             }

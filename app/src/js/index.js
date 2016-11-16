@@ -40,11 +40,38 @@ var TestPage = {
         });
     },
     testGray:function(){
-        var imgUrl = './src/img/test.jpg';
+        var imgUrl = './src/img/test1.jpg';
         var _this =this;
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseGrayImg(img);
+            _this.drawImg(nImg);
+        });
+    },
+    testOld: function () {
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseOldImg(img);
+            _this.drawImg(nImg);
+        });
+    },
+    testBaoHe:function(){
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseBaoHeImg(img);
+            _this.drawImg(nImg);
+        });
+    },
+    testAf:function(){
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseAfImg(img);
             _this.drawImg(nImg);
         });
     }
@@ -53,6 +80,9 @@ var TestPage = {
 
 window.onload = function(){
     TestPage.init();
-//    TestPage.testReverse();
-    TestPage.testGray();
+    //TestPage.testReverse();
+    //TestPage.testGray();
+    //TestPage.testOld();
+    //TestPage.testBaoHe();
+    TestPage.testAf();
 }

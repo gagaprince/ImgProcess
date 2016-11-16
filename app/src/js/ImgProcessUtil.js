@@ -18,6 +18,18 @@ var ImgProcessUtil = {
     parseGrayImg:function(img){
         var imp = ImgProcess.create(img);
         return imp.gray().createImg();
+    },
+    parseOldImg:function(img){
+        var imp = ImgProcess.create(img);
+        return imp.old().createImg();
+    },
+    parseBaoHeImg:function(img){
+        var imp = ImgProcess.create(img);
+        return imp.baohe().createImg();
+    },
+    parseAfImg:function(img){
+        var imp = ImgProcess.create(img);
+        return imp.touming().createImg();
     }
 };
 module.exports = ImgProcessUtil;
