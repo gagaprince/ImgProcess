@@ -5,7 +5,7 @@ var AfOperation = CanvasOperation.extend({
         [1,0,0,0,0],
         [0,1,0,0,0],
         [0,0,1,0,0],
-        [0,0,0,1,0]
+        [0,0,0,0.9,0]
     ],
     operateData:function(imgData){
         this.operateDataByMatrix(this.matrix,imgData);

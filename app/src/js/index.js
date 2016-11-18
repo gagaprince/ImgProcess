@@ -21,22 +21,25 @@ var TestPage = {
         this.canvas.attr('width',width);
         this.ctx = this.domCanvas.getContext('2d');
     },
-    drawImg:function(img){
+    drawImg:function(img,index){
+        if(!index){
+            index=0;
+        }
         var canvas = this.domCanvas;
         var swidth = img.width;
         var sheight = img.height;
-        var width = canvas.width;
+        var width = canvas.width/2;
         var height = width/swidth*sheight;
 
-        this.ctx.drawImage(img,0,0,swidth,sheight,0,0,width,height);
+        this.ctx.drawImage(img,0,0,swidth,sheight,index*width,0,width,height);
     },
     testReverse:function(){
-        var imgUrl = './src/img/test.jpg';
+        var imgUrl = './src/img/test1.jpg';
         var _this =this;
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseReverseImg(img);
-            _this.drawImg(nImg);
+            _this.drawImg(nImg,1);
         });
     },
     testGray:function(){
@@ -45,7 +48,7 @@ var TestPage = {
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseGrayImg(img);
-            _this.drawImg(nImg);
+            _this.drawImg(nImg,1);
         });
     },
     testOld: function () {
@@ -54,7 +57,7 @@ var TestPage = {
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseOldImg(img);
-            _this.drawImg(nImg);
+            _this.drawImg(nImg,1);
         });
     },
     testBaoHe:function(){
@@ -63,7 +66,7 @@ var TestPage = {
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseBaoHeImg(img);
-            _this.drawImg(nImg);
+            _this.drawImg(nImg,1);
         });
     },
     testAf:function(){
@@ -72,7 +75,7 @@ var TestPage = {
         ImgProcessUtil.loadImg(imgUrl,function(img){
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseAfImg(img);
-            _this.drawImg(nImg);
+            _this.drawImg(nImg,1);
         });
     }
 }
@@ -80,9 +83,9 @@ var TestPage = {
 
 window.onload = function(){
     TestPage.init();
-    //TestPage.testReverse();
+    TestPage.testReverse();
     //TestPage.testGray();
     //TestPage.testOld();
     //TestPage.testBaoHe();
-    TestPage.testAf();
+    //TestPage.testAf();
 }
