@@ -111,6 +111,17 @@ var CanvasOperation = HClass.extend({
         this.destory();
         return image;
     },
+    copy:function(imgData){
+        var cpImg = {
+            data:[],
+            width:imgData.width,
+            height:imgData.height
+        }
+        for(var i=0;i<imgData.data.length;i++){
+            cpImg.data.push(imgData.data[i]);
+        }
+        return cpImg;
+    },
     destory:function(){
         this.canvas=null;
         this.domCanvas=null;

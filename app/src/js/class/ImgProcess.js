@@ -5,6 +5,7 @@ var GrayOperation = require('./GrayOperation');
 var OldOperation = require('./OldOperation');
 var BaoHeOperation = require('./BaoHeOperation');
 var AfOperation = require('./AfOperation');
+var VagueOperation = require('./VagueOperation');
 var ImgProcess = HClass.extend({
     img:null,
     ctor:function(img){
@@ -35,6 +36,11 @@ var ImgProcess = HClass.extend({
         this.img = op.operate();
         return this;
 
+    },
+    vague:function(px){
+        var op = new VagueOperation(this.img);
+        this.img = op.operate(this.img,px);
+        return this;
     },
     createImg:function(){
         return this.img;

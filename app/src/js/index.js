@@ -77,15 +77,25 @@ var TestPage = {
             var nImg = ImgProcessUtil.parseAfImg(img);
             _this.drawImg(nImg,1);
         });
+    },
+    testVague:function(){
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseVagueImg(img,4);
+            _this.drawImg(nImg,1);
+        });
     }
 }
 
 
 window.onload = function(){
     TestPage.init();
-    TestPage.testReverse();
+    //TestPage.testReverse();
     //TestPage.testGray();
     //TestPage.testOld();
     //TestPage.testBaoHe();
     //TestPage.testAf();
+    TestPage.testVague();
 }

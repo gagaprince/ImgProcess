@@ -30,6 +30,10 @@ var ImgProcessUtil = {
     parseAfImg:function(img){
         var imp = ImgProcess.create(img);
         return imp.touming().createImg();
+    },
+    parseVagueImg:function(img,px){
+        var imp = ImgProcess.create(img);
+        return imp.vague(px).createImg();
     }
 };
 module.exports = ImgProcessUtil;
