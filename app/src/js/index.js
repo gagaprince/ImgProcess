@@ -82,8 +82,12 @@ var TestPage = {
         var imgUrl = './src/img/test1.jpg';
         var _this =this;
         ImgProcessUtil.loadImg(imgUrl,function(img){
+            //var nImg = ImgProcessUtil.parseUGaussImg(img,10);
             _this.drawImg(img);
-            var nImg = ImgProcessUtil.parseVagueImg(img,4);
+            //var nImg = ImgProcessUtil.parseGaussImg(img,2);
+            //var nImg = ImgProcessUtil.parseVagueImg(img,100);
+            //_this.drawImg(nImg);
+            var nImg = ImgProcessUtil.parseUVagueImg(img,100);
             _this.drawImg(nImg,1);
         });
     }

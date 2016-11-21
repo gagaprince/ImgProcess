@@ -6,6 +6,9 @@ var OldOperation = require('./OldOperation');
 var BaoHeOperation = require('./BaoHeOperation');
 var AfOperation = require('./AfOperation');
 var VagueOperation = require('./VagueOperation');
+var UVagueOperation = require('./UVagueOperation');
+var GaussOperation = require('./GaussOperation');
+var UGaussOperation = require('./UGaussOperation');
 var ImgProcess = HClass.extend({
     img:null,
     ctor:function(img){
@@ -39,6 +42,21 @@ var ImgProcess = HClass.extend({
     },
     vague:function(px){
         var op = new VagueOperation(this.img);
+        this.img = op.operate(this.img,px);
+        return this;
+    },
+    uvague:function(px){
+        var op = new UVagueOperation(this.img);
+        this.img = op.operate(this.img,px);
+        return this;
+    },
+    gauss:function(px){
+        var op = new GaussOperation(this.img);
+        this.img = op.operate(this.img,px);
+        return this;
+    },
+    ugauss:function(px){
+        var op = new UGaussOperation(this.img);
         this.img = op.operate(this.img,px);
         return this;
     },

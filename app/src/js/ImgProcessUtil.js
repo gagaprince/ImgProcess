@@ -7,7 +7,10 @@ var ImgProcessUtil = {
         image.src = imgUrl;
         image.onload=function(){
             if(callback){
+                var now = new Date().getTime();
                 callback(image);
+                var now2 = new Date().getTime();
+                console.log("处理耗时："+(now2-now)+"ms");
             }
         }
     },
@@ -34,6 +37,18 @@ var ImgProcessUtil = {
     parseVagueImg:function(img,px){
         var imp = ImgProcess.create(img);
         return imp.vague(px).createImg();
+    },
+    parseUVagueImg:function(img,px){
+        var imp = ImgProcess.create(img);
+        return imp.uvague(px).createImg();
+    },
+    parseGaussImg:function(img,px){
+        var imp = ImgProcess.create(img);
+        return imp.gauss(px).createImg();
+    },
+    parseUGaussImg:function(img,px){
+        var imp = ImgProcess.create(img);
+        return imp.ugauss(px).createImg();
     }
 };
 module.exports = ImgProcessUtil;

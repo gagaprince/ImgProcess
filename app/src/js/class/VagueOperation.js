@@ -11,6 +11,12 @@ var VagueOperation = CanvasOperation.extend({
         var image = this.createImageFromImgData(imgData);
         return image;
     },
+    p:function(x,y){
+        return {
+            x:x,
+            y:y
+        }
+    },
     operateData:function(imgData,px){
         var cpImgData = this.copy(imgData);
         var data = imgData.data;
@@ -23,14 +29,18 @@ var VagueOperation = CanvasOperation.extend({
             var ca = 0;
             var h = Math.floor(i/4/imgData.width);
             var w = (i/4)%imgData.width;
+            var midP = this.p(w,h);
             for (var j = h-px; j <= h+px; j++) {
                 for(var k=w-px;k<=w+px;k++){
-                    var tempData = this.findOneImgDataByXY(k,j,cpImgData);
+                    var nowP = this.p(k,j);
+                    var tempData = this.findOneImgDataByXY(cpImgData,nowP,midP,px);
                     if(tempData!=null){
-                        ca++;
-                        R+=tempData[0];
-                        G+=tempData[1];
-                        B+=tempData[2];
+                        var quan = tempData.quan;
+                        var pxData = tempData.pxData;
+                        ca+=quan;
+                        R+=quan*pxData[0];
+                        G+=quan*pxData[1];
+                        B+=quan*pxData[2];
                     }
                 }
             }
@@ -48,7 +58,9 @@ var VagueOperation = CanvasOperation.extend({
         }
         return imgData;
     },
-    findOneImgDataByXY:function(x,y,imgData) {
+    findOneImgDataByXY:function(imgData,nowP) {
+        var x = nowP.x;
+        var y = nowP.y;
         var width = imgData.width;
         var data = imgData.data;
         var index = x + width * y;
@@ -56,12 +68,15 @@ var VagueOperation = CanvasOperation.extend({
         if (index < 0 || index >= data.length) {
             return null;
         }
-        return [
-            data[index],
-            data[index + 1],
-            data[index + 2],
-            data[index + 3]
-        ];
+        return {
+            quan:1,
+            pxData:[
+                data[index],
+                data[index + 1],
+                data[index + 2],
+                data[index + 3]
+            ]
+        };
     }
 
 });
