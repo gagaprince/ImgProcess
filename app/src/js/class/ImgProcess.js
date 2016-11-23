@@ -9,6 +9,7 @@ var VagueOperation = require('./VagueOperation');
 var UVagueOperation = require('./UVagueOperation');
 var GaussOperation = require('./GaussOperation');
 var UGaussOperation = require('./UGaussOperation');
+var DFTOperation = require('./DFTOperation');
 var ImgProcess = HClass.extend({
     img:null,
     ctor:function(img){
@@ -58,6 +59,11 @@ var ImgProcess = HClass.extend({
     ugauss:function(px){
         var op = new UGaussOperation(this.img);
         this.img = op.operate(this.img,px);
+        return this;
+    },
+    dft:function(){
+        var op = new DFTOperation(this.img);
+        this.img = op.operate(this.img);
         return this;
     },
     createImg:function(){

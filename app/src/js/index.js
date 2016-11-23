@@ -87,7 +87,8 @@ var TestPage = {
             //var nImg = ImgProcessUtil.parseGaussImg(img,2);
             //var nImg = ImgProcessUtil.parseVagueImg(img,100);
             //_this.drawImg(nImg);
-            var nImg = ImgProcessUtil.parseUVagueImg(img,100);
+//            var nImg = ImgProcessUtil.parseUVagueImg(img,100);
+            var nImg = ImgProcessUtil.parseDFTImg(img);
             _this.drawImg(nImg,1);
         });
     }

@@ -49,6 +49,10 @@ var ImgProcessUtil = {
     parseUGaussImg:function(img,px){
         var imp = ImgProcess.create(img);
         return imp.ugauss(px).createImg();
+    },
+    parseDFTImg:function(img){
+        var imp = ImgProcess.create(img);
+        return imp.dft().createImg();
     }
 };
 module.exports = ImgProcessUtil;
