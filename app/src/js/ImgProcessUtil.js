@@ -14,6 +14,21 @@ var ImgProcessUtil = {
             }
         }
     },
+    parseScaleImg:function(img,scale){
+        var iw = img.width;
+        var ih = img.height;
+        var dw = iw*scale;
+        var dh = ih*scale;
+        var $canvas = $("<canvas></canvas>");
+        var c = $canvas[0];
+        var ctx = c.getContext("2d");
+        $canvas.attr("width",dw);
+        $canvas.attr("height",dh);
+        ctx.drawImage(img,0,0,iw,ih,0,0,dw,dh);
+        var image = new Image();
+        image.src = c.toDataURL("image/png");
+        return image;
+    },
     parseReverseImg:function(img){
         var imp = ImgProcess.create(img);
         return imp.reverse().createImg();

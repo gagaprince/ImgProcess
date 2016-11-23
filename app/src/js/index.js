@@ -30,7 +30,6 @@ var TestPage = {
         var sheight = img.height;
         var width = canvas.width/2;
         var height = width/swidth*sheight;
-
         this.ctx.drawImage(img,0,0,swidth,sheight,index*width,0,width,height);
     },
     testReverse:function(){
@@ -87,7 +86,19 @@ var TestPage = {
             //var nImg = ImgProcessUtil.parseGaussImg(img,2);
             //var nImg = ImgProcessUtil.parseVagueImg(img,100);
             //_this.drawImg(nImg);
-//            var nImg = ImgProcessUtil.parseUVagueImg(img,100);
+            var nImg = ImgProcessUtil.parseUVagueImg(img,100);
+            //var nImg = ImgProcessUtil.parseDFTImg(img);
+            _this.drawImg(nImg,1);
+        });
+    },
+    testDFT:function(){
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            img = ImgProcessUtil.parseScaleImg(img,0.25);
+            console.log(img.width);
+            console.log(img.height);
+            _this.drawImg(img);
             var nImg = ImgProcessUtil.parseDFTImg(img);
             _this.drawImg(nImg,1);
         });
@@ -102,5 +113,6 @@ window.onload = function(){
     //TestPage.testOld();
     //TestPage.testBaoHe();
     //TestPage.testAf();
-    TestPage.testVague();
+    //TestPage.testVague();
+    TestPage.testDFT();
 }

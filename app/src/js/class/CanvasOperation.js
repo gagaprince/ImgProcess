@@ -122,6 +122,22 @@ var CanvasOperation = HClass.extend({
         }
         return cpImg;
     },
+
+    addArray: function (a1,a2) {
+        if(a1.length!=a2.length){
+            throw "两个向量长度不同 不能相加";
+        }
+        for(var i=0;i<a1.length;i++){
+            a1[i]+=a2[i];
+        }
+        return a1;
+    },
+    chengArray:function(a1,num){
+        for(var i=0;i<a1.length;i++){
+            a1[i]*=num;
+        }
+        return a1;
+    },
     destory:function(){
         this.canvas=null;
         this.domCanvas=null;
