@@ -1,5 +1,6 @@
 "use strict";
 var CanvasOperation = require('./CanvasOperation');
+var Cnum = require('./math/Complex');
 var DFTOperation = CanvasOperation.extend({
     operate:function(img){
         if(!img){
@@ -11,17 +12,21 @@ var DFTOperation = CanvasOperation.extend({
         return image;
     },
     operateData:function(imgData){
-        var cpImgData = this.copy(imgData);
-
+        var cpImageData = this.copy(imgData);
         var width = imgData.width;
         var height = imgData.height;
-
+        for(var i=0;i<width;i++){
+            var fm = this.parseFMfromImgDataX(cpImageData,i);
+            var dfm = this.dft(fm);
+            this.parseFMintoImgDataX(cpImageData,i,dfm);
+        }
         for(var i=0;i<height;i++){
-            var fm = this.parseFMfromImgDataY(imgData,i);
+            var fm = this.parseFMfromImgDataY(cpImageData,i);
             var dfm = this.dft(fm);
             this.gdft(dfm);
-            this.parseFMintoImgDataY(imgData,i,dfm);
+            this.parseFMintoImgDataY(cpImageData,i,dfm);
         }
+        //将cpImageData中的数据返衍到imageData中
 
         return imgData;
     },
@@ -31,14 +36,21 @@ var DFTOperation = CanvasOperation.extend({
             var tempArr = fm[i];
             this.setOneImgDataByXY(imgData,this.p(i,y),tempArr);
         }
-        return fm;
+    },
+    parseFMintoImgDataX:function(imgData,x,fm){
+        var height = imgData.height;
+        for(var i=0;i<height;i++){
+            var tempArr = fm[i];
+            this.setOneImgDataByXY(imgData,this.p(x,i),tempArr);
+        }
     },
     //找出每行的像素数组
     parseFMfromImgDataY:function(imgData,y){
         var width = imgData.width;
         var fm = [];
         for(var i=0;i<width;i++){
-            fm.push(this.findOneImgDataByXY(imgData,this.p(i,y)));
+            var pxDatas =  this.findOneImgDataByXY(imgData,this.p(i,y));
+            fm.push(this.transformCarray(pxDatas));
         }
         return fm;
     },
@@ -46,9 +58,19 @@ var DFTOperation = CanvasOperation.extend({
         var height = imgData.height;
         var fm = [];
         for(var i=0;i<height;i++){
-            fm.push(this.findOneImgDataByXY(imgData,this.p(x,i)));
+            var pxDatas =  this.findOneImgDataByXY(imgData,this.p(x,i));
+            fm.push(this.transformCarray(pxDatas));
         }
         return fm;
+    },
+    transformCarray:function(array){
+        var len = array.length;
+        for(var i=0;i<len;i++){
+            var ele = array[i];
+            if(typeof ele =="number"){
+                array[i]=Cnum.create(ele,0);
+            }
+        }
     },
     p: function (x,y) {
         return {
@@ -91,11 +113,12 @@ var DFTOperation = CanvasOperation.extend({
         var dfm = [];
         var w = 2*Math.PI/N;
         for(var n=0;n<N;n++){
-            var xn=[0,0,0];
+            var xn=[Cnum.create(0,0),Cnum.create(0,0),Cnum.create(0,0)];
             for(var k=0;k<N;k++){
                 var alf = w*k*n;
                 xn = this.addArray(xn,
-                    this.chengArray(fm[k],Math.sin(alf)+Math.cos(alf)));
+                    this.chengArray(fm[k],Cnum.create(Math.cos(alf),-Math.sin(alf))));
+//                    this.chengArray(fm[k],Math.cos(alf)-Math.sin(alf)));
             }
             dfm.push(xn);
         }
@@ -153,7 +176,23 @@ var DFTOperation = CanvasOperation.extend({
             minM:minM,
             maxM:maxM
         }
-    }
+    },
+    addArray: function (a1,a2) {
+        if(a1.length!=a2.length){
+            throw "两个向量长度不同 不能相加";
+        }
+        for(var i=0;i<a1.length;i++){
+            //这里是实数加法
+            a1[i].add(a2[i]);
+        }
+        return a1;
+    },
+    chengArray:function(a1,num){
+        for(var i=0;i<a1.length;i++){
+            a1[i].cheng(num);
+        }
+        return a1;
+    },
 
 });
 module.exports = DFTOperation;

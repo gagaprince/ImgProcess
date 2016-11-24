@@ -14,11 +14,34 @@ var ImgProcessUtil = {
             }
         }
     },
+    createBWimg:function(w){
+        var $canvas = $("<canvas></canvas>");
+        var c = $canvas[0];
+        var ctx = c.getContext("2d");
+        $canvas.attr("width",w);
+        $canvas.attr("height",w);
+        ctx.fillStyle="#000000";
+        ctx.fillRect(0,0,w/2,w);
+        ctx.fillStyle="#ffffff";
+        ctx.fillRect(w/2,0,w/2,w);
+        var image = new Image();
+        image.src = c.toDataURL("image/png");
+        return image;
+    },
     parseScaleImg:function(img,scale){
         var iw = img.width;
         var ih = img.height;
         var dw = iw*scale;
         var dh = ih*scale;
+        return this.createImg(iw,ih,dw,dh,img);
+    },
+    parseBoxImg:function(img,w){
+        if(!w){
+            w = Math.min(img.width,img.height);
+        }
+        return this.createImg(w,w,w,w,img);
+    },
+    createImg:function(iw,ih,dw,dh,img){
         var $canvas = $("<canvas></canvas>");
         var c = $canvas[0];
         var ctx = c.getContext("2d");

@@ -95,7 +95,9 @@ var TestPage = {
         var imgUrl = './src/img/test1.jpg';
         var _this =this;
         ImgProcessUtil.loadImg(imgUrl,function(img){
+//            var img = ImgProcessUtil.createBWimg(128);
             img = ImgProcessUtil.parseScaleImg(img,0.25);
+//            img = ImgProcessUtil.parseBoxImg(img);
             console.log(img.width);
             console.log(img.height);
             _this.drawImg(img);
