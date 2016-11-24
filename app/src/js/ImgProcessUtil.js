@@ -90,7 +90,7 @@ var ImgProcessUtil = {
     },
     parseDFTImg:function(img){
         var imp = ImgProcess.create(img);
-        return imp.dft().createImg();
+        return imp.gray().dft().createImg();
     }
 };
 module.exports = ImgProcessUtil;

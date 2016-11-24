@@ -13,6 +13,7 @@ var Complex = HClass.extend({
         //复数的加法
         this.a += num.a;
         this.b += num.b;
+        this.m = this.mod();
     },
     cheng:function(num){
         var a = this.a;
@@ -21,12 +22,19 @@ var Complex = HClass.extend({
         var b1 = num.b;
         this.a = a*a1-b*b1;
         this.b = a*b1+b*a1;
+        this.m=this.mod();
+    },
+    getM:function(){
+        return this.m;
     },
     mod:function(){
         //取摸
         var a = this.a;
         var b = this.b;
         return Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
+    },
+    clone:function(){
+        return Complex.create(this.a,this.b);
     }
 });
 Complex.create =function(a,b){
