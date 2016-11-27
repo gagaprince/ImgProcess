@@ -16,22 +16,38 @@ var DFTOperation = CanvasOperation.extend({
         var cpImageData = this.copy(imgData);
         var width = imgData.width;
         var height = imgData.height;
+
         for(var i=0;i<width;i++){
             var fm = this.parseFMfromImgDataX(cpImageData,i);
             var dfm = this.dft(fm);
             this.parseFMintoImgDataX(cpImageData,i,dfm);
+
         }
         for(var i=0;i<height;i++){
             var fm = this.parseFMfromImgDataY(cpImageData,i);
-            var dfm = this.dft(fm,1);
-            this.gdft(dfm);
-            this.parseFMintoImgDataY(imgData,i,dfm);
+            var dfm = this.dft(fm);
+            this.parseFMintoImgDataY(cpImageData,i,dfm);
         }
+
+
+        //将数据提取出来
+        var fm = this.parseFMfromImgData(cpImageData);
+        var dfm = this.gdft(fm);
+        this.parseFMintoImgData(imgData,dfm);
         //将cpImageData中的数据返衍到imageData中
         //this.reSetImgData(cpImageData,imgData);
-        console.log(imgData);
 
         return imgData;
+    },
+    parseFMintoImgData:function(imgData,fm){
+        var data = imgData.data;
+        for(var i=0;i<fm.length;i++){
+            var index = i*4;
+            var item = fm[i];
+            data[index]=item[0];
+            data[index+1]=item[1];
+            data[index+2]=item[2];
+        }
     },
     parseFMintoImgDataY:function(imgData,y,fm){
         var width = imgData.width;
@@ -47,6 +63,18 @@ var DFTOperation = CanvasOperation.extend({
             this.setOneImgDataByXY(imgData,this.p(x,i),tempArr);
         }
     },
+    parseFMfromImgData:function(imgData){
+        var fm = [];
+        var data = imgData.data;
+        for(var i=0;i<imgData.data.length;i=i+4){
+            fm.push([
+                data[i],
+                data[i+1],
+                data[i+2]
+            ]);
+        }
+        return fm;
+    },
     //找出每行的像素数组
     parseFMfromImgDataY:function(imgData,y){
         var width = imgData.width;
@@ -57,6 +85,7 @@ var DFTOperation = CanvasOperation.extend({
         }
         return fm;
     },
+
     parseFMfromImgDataX:function(imgData,x){
         var height = imgData.height;
         var fm = [];
@@ -121,10 +150,9 @@ var DFTOperation = CanvasOperation.extend({
             var xn = [Cnum.create(0,0),Cnum.create(0,0),Cnum.create(0,0)];
             for(var k=0;k<N;k++){
                 var alf = w*k*n;
-
-                xn = this.addArray(xn,
-                    this.chengArray(fm[k],Cnum.create(Math.cos(alf),-Math.sin(alf))));
-//                    this.chengArray(fm[k],Math.cos(alf)-Math.sin(alf)));
+                var cxn = this.cloneArray(xn);
+                var cheng = this.chengArray(fm[k],Cnum.create(Math.cos(alf),-Math.sin(alf)));
+                xn = this.addArray(xn,cheng);
             }
             dfm.push(xn);
         }
@@ -187,6 +215,18 @@ var DFTOperation = CanvasOperation.extend({
             maxM:maxM
         }
     },
+    cloneArray:function(arr){
+        var newArr = [];
+        for(var i=0;i<arr.length;i++){
+            if(arr[i].length){
+                newArr.push(this.cloneArray(arr[i]));
+            }else{
+                newArr.push(arr[i].clone());
+            }
+
+        }
+        return newArr;
+    },
     addArray: function (a1,a2) {
         if(a1.length!=a2.length){
             throw "两个向量长度不同 不能相加";
@@ -197,10 +237,13 @@ var DFTOperation = CanvasOperation.extend({
         return a1;
     },
     chengArray:function(a1,num){
+        var ra = [];
         for(var i=0;i<a1.length;i++){
-            a1[i].cheng(num);
+            var numCp = num.clone();
+            numCp.cheng(a1[i]);
+            ra.push(numCp);
         }
-        return a1;
+        return ra;
     }
 
 });

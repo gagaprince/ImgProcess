@@ -20,6 +20,7 @@ var Complex = HClass.extend({
         var b = this.b;
         var a1 = num.a;
         var b1 = num.b;
+        //console.log("a:"+a+"b:"+b+"a1:"+a1+"b1:"+b1);
         this.a = a*a1-b*b1;
         this.b = a*b1+b*a1;
         this.m=this.mod();

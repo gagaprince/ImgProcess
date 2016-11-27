@@ -21,9 +21,9 @@ var ImgProcessUtil = {
         $canvas.attr("width",w);
         $canvas.attr("height",w);
         ctx.fillStyle="#000000";
-        ctx.fillRect(0,0,w/2,w);
+        ctx.fillRect(0,0,w,w);
         ctx.fillStyle="#ffffff";
-        ctx.fillRect(w/2,0,w/2,w);
+        ctx.fillRect(w/4,w/4,w/2,w/2);
         var image = new Image();
         image.src = c.toDataURL("image/png");
         return image;
