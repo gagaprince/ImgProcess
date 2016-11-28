@@ -94,16 +94,16 @@ var TestPage = {
     testDFT:function(){
         var imgUrl = './src/img/test1.jpg';
         var _this =this;
-        //ImgProcessUtil.loadImg(imgUrl,function(img){
-            var img = ImgProcessUtil.createBWimg(64);
-            //img = ImgProcessUtil.parseScaleImg(img,0.1);
-            //img = ImgProcessUtil.parseBoxImg(img);
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+//            var img = ImgProcessUtil.createBWimg(128);
+            img = ImgProcessUtil.parseScaleImg(img,1);
+//            img = ImgProcessUtil.parseBoxImg(img);
             console.log(img.width);
             console.log(img.height);
             _this.drawImg(img);
             var nImg = ImgProcessUtil.parseDFTImg(img);
             _this.drawImg(nImg,1);
-        //});
+        });
     }
 }
 
