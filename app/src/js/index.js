@@ -104,6 +104,16 @@ var TestPage = {
             var nImg = ImgProcessUtil.parseDFTImg(img);
             _this.drawImg(nImg,1);
         });
+    },
+    testOil:function(){
+        var imgUrl = './src/img/test1.jpg';
+        var _this =this;
+        ImgProcessUtil.loadImg(imgUrl,function(img){
+            img = ImgProcessUtil.parseScaleImg(img,1);
+            _this.drawImg(img);
+            var nImg = ImgProcessUtil.parseOilImg(img);
+            _this.drawImg(nImg,1);
+        });
     }
 }
 
@@ -116,5 +126,6 @@ window.onload = function(){
     //TestPage.testBaoHe();
     //TestPage.testAf();
     //TestPage.testVague();
-    TestPage.testDFT();
+    //TestPage.testDFT();
+    TestPage.testOil();
 }

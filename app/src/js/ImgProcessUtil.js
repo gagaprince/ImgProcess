@@ -91,6 +91,10 @@ var ImgProcessUtil = {
     parseDFTImg:function(img){
         var imp = ImgProcess.create(img);
         return imp.dft().createImg();
+    },
+    parseOilImg:function(img,r,g){
+        var imp = ImgProcess.create(img);
+        return imp.oil(r,g).createImg();
     }
 };
 module.exports = ImgProcessUtil;
