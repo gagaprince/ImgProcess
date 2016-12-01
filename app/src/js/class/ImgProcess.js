@@ -1,5 +1,5 @@
 "use strict";
-var HClass = require('./HClass');
+var HClass = require('./base/HClass');
 var ReverseOperation = require('./ReverseOperation');
 var GrayOperation = require('./GrayOperation');
 var OldOperation = require('./OldOperation');
@@ -11,6 +11,7 @@ var GaussOperation = require('./GaussOperation');
 var UGaussOperation = require('./UGaussOperation');
 var DFTOperation = require('./DFTOperation');
 var OilOperation = require('./OilOperation');
+var FrostOperation = require('./FrostOperation');
 var ImgProcess = HClass.extend({
     img:null,
     ctor:function(img){
@@ -70,6 +71,11 @@ var ImgProcess = HClass.extend({
     oil:function(r,grayNum){
         var op = new OilOperation(this.img);
         this.img = op.operate(this.img,r,grayNum);
+        return this;
+    },
+    frost:function(r){
+        var op = new FrostOperation(this.img);
+        this.img = op.operate(this.img,r);
         return this;
     },
     createImg:function(){

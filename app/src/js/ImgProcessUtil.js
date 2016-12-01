@@ -23,7 +23,8 @@ var ImgProcessUtil = {
         ctx.fillStyle="#000000";
         ctx.fillRect(0,0,w,w);
         ctx.fillStyle="#ffffff";
-        ctx.fillRect(w/4,w/4,w/2,w/2);
+//        ctx.fillRect(w/4,w/4,w/2,w/2);
+        ctx.fillRect(0,0,w/2,w/2);
         var image = new Image();
         image.src = c.toDataURL("image/png");
         return image;
@@ -95,6 +96,10 @@ var ImgProcessUtil = {
     parseOilImg:function(img,r,g){
         var imp = ImgProcess.create(img);
         return imp.oil(r,g).createImg();
+    },
+    parseFrostImg:function(img,r){
+        var imp = ImgProcess.create(img);
+        return imp.frost(r).createImg();
     }
 };
 module.exports = ImgProcessUtil;

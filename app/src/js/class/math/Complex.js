@@ -1,5 +1,5 @@
 "use strict";
-var HClass = require('../HClass');
+var HClass = require('../base/HClass');
 var Complex = HClass.extend({
     a:0,//实数部分
     b:0,//虚数部分

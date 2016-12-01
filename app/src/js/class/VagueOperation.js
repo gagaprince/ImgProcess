@@ -11,12 +11,6 @@ var VagueOperation = CanvasOperation.extend({
         var image = this.createImageFromImgData(imgData);
         return image;
     },
-    p:function(x,y){
-        return {
-            x:x,
-            y:y
-        }
-    },
     operateData:function(imgData,px){
         var cpImgData = this.copy(imgData);
         var data = imgData.data;

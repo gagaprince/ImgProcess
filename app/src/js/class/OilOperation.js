@@ -1,7 +1,8 @@
 "use strict";
 //油画
-var VagueOperation = require('./VagueOperation');
-var OilOperation = VagueOperation.extend({
+var CanvasOperation = require('./CanvasOperation');
+var RGBpx = require('./base/RGBpx');
+var OilOperation = CanvasOperation.extend({
     r:5,
     grayNum:20,
     operate:function(img,r,grayNum){
@@ -10,37 +11,30 @@ var OilOperation = VagueOperation.extend({
         return this._super(img);
     },
     operateData:function(imgData){
-        var cpImgData = this.copy(imgData);
-        var data = imgData.data;
+        var cpImgData = this.copyToRGB(imgData);
+        var rgbData = cpImgData.rgbData;
         var px = this.r;
         var grayNum = this.grayNum;
-        for (var i=0;i<data.length;i+=4) {
-            var h = Math.floor(i/4/imgData.width);
-            var w = (i/4)%imgData.width;
+        var width = cpImgData.width;
+        var height = cpImgData.height;
+        for (var i=0;i<rgbData.length;i++) {
+            var h = Math.floor(i/width);
+            var w = i%width;
 
             var grayArray = [];
-            var rarr = [];
-            var garr = [];
-            var barr = [];
-            for(var z=0;z<grayNum;z++){
+            var rgbArr = [];
+            for(var z=0;z<=grayNum;z++){
                 grayArray.push(0);
-                rarr.push(0);
-                garr.push(0);
-                barr.push(0);
+                rgbArr.push(RGBpx.create(0,0,0))
             }
 
             for (var j = h-px; j <= h+px; j++) {
                 for(var k=w-px;k<=w+px;k++){
                     var nowP = this.p(k,j);
-                    var tempData = this.findOneImgDataByXY(cpImgData,nowP);
+                    var tempData = this.findOneRGBDataByXY(cpImgData,nowP);
                     if(!tempData)continue;
-                    var tR = tempData[0];
-                    var tG = tempData[1];
-                    var tB = tempData[2];
-                    var grayLevel = Math.floor((tR+tB+tG)/3/255*grayNum);
-                    rarr[grayLevel]+=tR;
-                    garr[grayLevel]+=tG;
-                    barr[grayLevel]+=tB;
+                    var grayLevel = Math.floor(tempData.gray()/255*grayNum);
+                    rgbArr[grayLevel]=RGBpx.add(tempData,rgbArr[grayLevel]);
                     grayArray[grayLevel]++;
                 }
             }
@@ -48,18 +42,13 @@ var OilOperation = VagueOperation.extend({
             var maxIndex = this.findMaxIndex(grayArray);
             var count = grayArray[maxIndex];
 
-            data[i] = rarr[maxIndex]/count;
-            data[i + 1] = garr[maxIndex]/count;
-            data[i + 2] = barr[maxIndex]/count;
-
-            for(var z=0;z<grayNum;z++){
+            rgbData[i]=RGBpx.divi(rgbArr[maxIndex],count);
+            for(var z=0;z<=grayNum;z++){
                 grayArray[z]=0;
-                rarr[z]=0;
-                garr[z]=0;
-                barr[z]=0;
+                rgbArr[z]=RGBpx.create(0,0,0);
             }
-
         }
+        this.rgbToImg(imgData,cpImgData);
         return imgData;
     },
     findMaxIndex:function(grayArray){
@@ -72,13 +61,6 @@ var OilOperation = VagueOperation.extend({
             }
         }
         return maxIndex;
-    },
-    findOneImgDataByXY:function(imgData,nowP) {
-        var tempData = this._super(imgData,nowP);
-        if(tempData){
-            return tempData.pxData;
-        }
-        return null;
     }
 });
 module.exports = OilOperation;

@@ -1,5 +1,6 @@
 "use strict";
-var HClass = require('./HClass');
+var HClass = require('./base/HClass');
+var RGBpx = require('./base/RGBpx');
 var CanvasOperation = HClass.extend({
     canvas:null,
     domCanvas:null,
@@ -98,6 +99,12 @@ var CanvasOperation = HClass.extend({
         }
         return rm;
     },
+    p:function(x,y){
+        return {
+            x:x,
+            y:y
+        }
+    },
     /*_findMatrixValue:function(matrix,x,y){
         var len = matrix[0].length;
         return matrix[y][y*len+x];
@@ -110,6 +117,41 @@ var CanvasOperation = HClass.extend({
         image.src = canvas.toDataURL("image/png");
         this.destory();
         return image;
+    },
+    copyToRGB:function(imgData){
+        var cpImg = {
+            rgbData:[],
+            width:imgData.width,
+            height:imgData.height
+        }
+        var data = imgData.data;
+        for(var i=0;i<data.length;i+=4){
+            cpImg.rgbData.push(RGBpx.create(data[i],data[i+1],data[i+2]));
+        }
+        return cpImg;
+    },
+    rgbToImg:function(imgData,rgbImgData){
+        var data = imgData.data;
+        var rgbData = rgbImgData.rgbData;
+        for(var i=0;i<data.length;i+=4){
+            var index = i/4;
+            var rgb = rgbData[index];
+            data[i]=rgb.r;
+            data[i+1]=rgb.g;
+            data[i+2]=rgb.b;
+        }
+        return imgData;
+    },
+    findOneRGBDataByXY:function(imgRgbData,nowP){
+        var x = nowP.x;
+        var y = nowP.y;
+        var width = imgRgbData.width;
+        var rgbData = imgRgbData.rgbData;
+        var index = x + width * y;
+        if (index < 0 || index >= rgbData.length) {
+            return null;
+        }
+        return rgbData[index];
     },
     copy:function(imgData){
         var cpImg = {
