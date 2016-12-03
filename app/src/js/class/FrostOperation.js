@@ -1,5 +1,5 @@
 "use strict";
-//油画
+//毛玻璃
 var CanvasOperation = require('./CanvasOperation');
 var RGBpx = require('./base/RGBpx');
 var FrostOperation = CanvasOperation.extend({

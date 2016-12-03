@@ -14,6 +14,9 @@ var RGBpx = HClass.extend({
     },
     gray:function(){
         return (this.r+this.g+this.b)/3;
+    },
+    clone:function(){
+        return new RGBpx(this.r,this.g,this.b);
     }
 });
 RGBpx.create = function(r,g,b){
@@ -34,5 +37,12 @@ RGBpx.divi = function(p1,num){
 }
 RGBpx.muti = function(p1,num){
     return new RGBpx(p1.r*num,p1.g*num,p1.b*num);
+}
+RGBpx.pow = function(p1,n){
+    var p = RGBpx.create(1,1,1);
+    for(var i=0;i<n;i++){
+        p = RGBpx.muti(p1);
+    }
+    return p;
 }
 module.exports = RGBpx;

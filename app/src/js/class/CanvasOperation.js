@@ -125,9 +125,17 @@ var CanvasOperation = HClass.extend({
             height:imgData.height
         }
         var data = imgData.data;
-        for(var i=0;i<data.length;i+=4){
-            cpImg.rgbData.push(RGBpx.create(data[i],data[i+1],data[i+2]));
+        if(data){
+            for(var i=0;i<data.length;i+=4){
+                cpImg.rgbData.push(RGBpx.create(data[i],data[i+1],data[i+2]));
+            }
+        }else{
+            var rgbData = imgData.rgbData;
+            for(var i=0;i<rgbData.length;i++){
+                cpImg.rgbData.push(rgbData[i].clone());
+            }
         }
+
         return cpImg;
     },
     rgbToImg:function(imgData,rgbImgData){
@@ -141,6 +149,17 @@ var CanvasOperation = HClass.extend({
             data[i+2]=rgb.b;
         }
         return imgData;
+    },
+    setOneRGBDataByXY:function(imgRgbData,nowP,rgb){
+        var x = nowP.x;
+        var y = nowP.y;
+        var width = imgRgbData.width;
+        var rgbData = imgRgbData.rgbData;
+        var index = x+width*y;
+        if(index>=rgbData.length||index<0){
+            return;
+        }
+        rgbData[index]=rgb;
     },
     findOneRGBDataByXY:function(imgRgbData,nowP){
         var x = nowP.x;
