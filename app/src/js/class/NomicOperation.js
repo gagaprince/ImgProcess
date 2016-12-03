@@ -5,7 +5,11 @@ var RGBpx = require('./base/RGBpx');
 var NomicOperation = CanvasOperation.extend({
     xr:2,//局部半径
     yr:2,//局部y方向半径
-    operate:function(img){
+    c:2,
+    operate:function(img,xr,yr,c){
+        this.xr = xr;
+        this.yr = yr;
+        this.c = c;
         return this._super(img);
     },
     operateData:function(imgData){
@@ -14,15 +18,40 @@ var NomicOperation = CanvasOperation.extend({
         var mImgData = this.caculateMij(imgData);
         var vImgData = this.caculateVij(imgData);
 
-        
 
 
+        var kImgData = this.caculateKij(vImgData,this.c);
+        var yImgData = this.caculateYij(kImgData);
+
+        cpImgData = this._addAllDataM(
+            this._mutiData(yImgData,mImgData),
+            this._mutiData(kImgData,cpImgData)
+        );
+        this.rgbToImg(imgData,cpImgData);
+        console.log(cpImgData);
         return imgData;
     },
+    caculateYij:function(kImgData){
+        var cpKImgData = this.copyToRGB(kImgData);
+        var rgbData = cpKImgData.rgbData;
+        for(var i=0;i<rgbData.length;i++){
+            var item = rgbData[i];
+            rgbData[i] = RGBpx.minus(RGBpx.create(1,1,1),rgbData[i]);
+        }
+        return cpKImgData;
+    },
+    caculateKij:function(vImgData,c){
+        var cpVImgData = this.copyToRGB(vImgData);
+        cpVImgData = this._addAllData(cpVImgData,c);
+        vImgData = this._diviAllDataM(vImgData,cpVImgData);
+        return vImgData;
+    },
+
     //计算均方矩阵
     caculateVij:function(imgData){
         var v2ImgData = this.copyToRGB(imgData);
         var vlImgData = this.copyToRGB(imgData);
+        var temp = this.copyToRGB(imgData);
         var xr = this.xr;
         var yr = this.yr;
         var n = (2*xr+1)*(2*yr+1);
@@ -73,6 +102,8 @@ var NomicOperation = CanvasOperation.extend({
                 }else{
                     var ditem = this.findOneRGBDataByXY(dImgData,p);
                     var mlast = this.findOneRGBDataByXY(cpImgData,this.p(i-1,j));
+                    //console.log(p);
+                    //console.log(ditem);
                     var sum = RGBpx.add(ditem,mlast);
                     this.setOneRGBDataByXY(cpImgData,p,sum);
                 }
@@ -103,7 +134,7 @@ var NomicOperation = CanvasOperation.extend({
                     //使用当前位置上的数字快速计算列差
                     var sumi0 = this._cacuDijByCol(oldImgData,p,yr,
                         this.findOneRGBDataByXY(dImgData,this.p(i,j-1)));
-                    this.setOneRGBDataByXY(dImgData,p);
+                    this.setOneRGBDataByXY(dImgData,sumi0);
                 }
             }
         }
@@ -141,7 +172,9 @@ var NomicOperation = CanvasOperation.extend({
             var sum = RGBpx.create();
             for(var i=y-yr;i<=y+yr;i++){
                 var item = this.findOneRGBDataByXY(cpImgData,this.p(x,i));
-                sum = RGBpx.add(sum,item);
+                if(item){
+                    sum = RGBpx.add(sum,item);
+                }
             }
             returnData = sum;
         }
@@ -154,10 +187,40 @@ var NomicOperation = CanvasOperation.extend({
         var sum = RGBpx.create();
         for(var i=x-xr;i<=x+xr;i++){
             var item = this.findOneRGBDataByXY(cpImgData,this.p(i,y));
-            sum = RGBpx.add(sum,item);
+            if(item){
+                sum = RGBpx.add(sum,item);
+            }
         }
         returnData = sum;
         return returnData;
+    },
+    _addAllData:function(imgData,num){
+        var data = imgData.rgbData;
+        for(var i=0;i<data.length;i++){
+            var itemData = data[i];
+            data[i]=RGBpx.add(itemData,RGBpx.create(num,num,num));
+        }
+        return imgData;
+    },
+    _addAllDataM:function(imgData1,imgData2){
+        var data1 = imgData1.rgbData;
+        var data2 = imgData2.rgbData;
+        for(var i=0;i<data1.length;i++){
+            var itemData1 = data1[i];
+            var itemData2 = data2[i];
+            data1[i]=RGBpx.add(itemData1,itemData2);
+        }
+        return imgData1;
+    },
+    _diviAllDataM:function(imgData1,imgData2){
+        var data1 = imgData1.rgbData;
+        var data2 = imgData2.rgbData;
+        for(var i=0;i<data1.length;i++){
+            var itemData1 = data1[i];
+            var itemData2 = data2[i];
+            data1[i]=RGBpx.diviM(itemData1,itemData2);
+        }
+        return imgData1;
     },
     _diviAllData:function(imgData,n){
         var data = imgData.rgbData;
@@ -182,6 +245,16 @@ var NomicOperation = CanvasOperation.extend({
             var itemData1 = data1[i];
             var itemData2 = data2[i];
             data1[i]=RGBpx.minus(itemData1,itemData2);
+        }
+        return imgData1;
+    },
+    _mutiData:function(imgData1,imgData2){
+        var data1 = imgData1.rgbData;
+        var data2 = imgData2.rgbData;
+        for(var i=0;i<data1.length;i++){
+            var itemData1 = data1[i];
+            var itemData2 = data2[i];
+            data1[i]=RGBpx.mutiM(itemData1,itemData2);
         }
         return imgData1;
     }

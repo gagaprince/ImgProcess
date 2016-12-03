@@ -12,6 +12,7 @@ var UGaussOperation = require('./UGaussOperation');
 var DFTOperation = require('./DFTOperation');
 var OilOperation = require('./OilOperation');
 var FrostOperation = require('./FrostOperation');
+var NomicOperation = require('./NomicOperation');
 var ImgProcess = HClass.extend({
     img:null,
     ctor:function(img){
@@ -76,6 +77,11 @@ var ImgProcess = HClass.extend({
     frost:function(r){
         var op = new FrostOperation(this.img);
         this.img = op.operate(this.img,r);
+        return this;
+    },
+    nomic:function(xr,yr,r){
+        var op = new NomicOperation(this.img);
+        this.img = op.operate(this.img,xr,yr,r);
         return this;
     },
     createImg:function(){

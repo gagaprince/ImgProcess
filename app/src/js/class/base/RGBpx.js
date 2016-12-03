@@ -35,13 +35,20 @@ RGBpx.divi = function(p1,num){
     }
     return new RGBpx(p1.r/num,p1.g/num,p1.b/num);
 }
+RGBpx.diviM = function(p1,p2){
+    return new RGBpx(p1.r/p2.r,p1.g/p2.g,p1.b/p2.b);
+}
 RGBpx.muti = function(p1,num){
     return new RGBpx(p1.r*num,p1.g*num,p1.b*num);
 }
+RGBpx.mutiM = function(p1,p2){
+    return new RGBpx(p1.r*p2.r,p1.g*p2.g,p1.b*p2.b);
+}
+
 RGBpx.pow = function(p1,n){
     var p = RGBpx.create(1,1,1);
     for(var i=0;i<n;i++){
-        p = RGBpx.muti(p1);
+        p = RGBpx.mutiM(p1,p);
     }
     return p;
 }

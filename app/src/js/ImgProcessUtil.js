@@ -100,6 +100,10 @@ var ImgProcessUtil = {
     parseFrostImg:function(img,r){
         var imp = ImgProcess.create(img);
         return imp.frost(r).createImg();
+    },
+    parseNomicImg:function(img,xr,yr,c){
+        var imp = ImgProcess.create(img);
+        return imp.nomic(xr,yr,c).createImg();
     }
 };
 module.exports = ImgProcessUtil;
