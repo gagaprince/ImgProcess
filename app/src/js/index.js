@@ -128,13 +128,13 @@ var TestPage = {
         });
     },
     testNomic:function(){
-        var imgUrl = './src/img/test3.jpg';
+        var imgUrl = './src/img/test4.jpg';
         var _this =this;
         ImgProcessUtil.loadImg(imgUrl,function(img){
             img = ImgProcessUtil.parseScaleImg(img,1);
 //            var img = ImgProcessUtil.createBWimg(128);
             _this.drawImg(img);
-            var nImg = ImgProcessUtil.parseNomicImg(img,10,10,250);
+            var nImg = ImgProcessUtil.parseNomicImg(img,20,20,2000,1);
             _this.drawImg(nImg,1);
         });
     }

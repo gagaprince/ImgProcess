@@ -101,9 +101,12 @@ var ImgProcessUtil = {
         var imp = ImgProcess.create(img);
         return imp.frost(r).createImg();
     },
-    parseNomicImg:function(img,xr,yr,c){
+    parseNomicImg:function(img,xr,yr,c,times){
         var imp = ImgProcess.create(img);
-        return imp.nomic(xr,yr,c).createImg();
+        for(var i=0;i<times;i++){
+            imp.nomic(xr,yr,c)
+        }
+        return imp.createImg();
     }
 };
 module.exports = ImgProcessUtil;

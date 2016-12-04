@@ -61,10 +61,10 @@ var NomicOperation = CanvasOperation.extend({
 
         vlImgData = this.caculateSumij(vlImgData);
         vlImgData = this._powData(vlImgData,2);
-        vlImgData = this._diviAllData(vlImgData,n);
+        vlImgData = this._diviAllData(vlImgData,xr,yr);
 
         var vImgData = this._minusData(v2ImgData,vlImgData);
-        vImgData = this._diviAllData(vImgData,n);
+        vImgData = this._diviAllData(vImgData,xr,yr);
 
         return vImgData;
     },
@@ -74,7 +74,11 @@ var NomicOperation = CanvasOperation.extend({
         var xr = this.xr;
         var yr = this.yr;
         var cpImgData = this.caculateSumij(imgData);
-        cpImgData = this._diviAllData(cpImgData,(2*xr+1)*(2*yr+1));
+
+
+
+        //cpImgData = this._diviAllData(cpImgData,(2*xr+1)*(2*yr+1));
+        cpImgData = this._diviAllData(cpImgData,xr,yr);
         return cpImgData;
     },
     caculateSumij:function(imgData){
@@ -95,16 +99,30 @@ var NomicOperation = CanvasOperation.extend({
                     var mrgb = this._cacuSum00(cpImgData, xr, yr);
                     this.setOneRGBDataByXY(cpImgData, this.p(0, 0), mrgb);
                 }else if(i==0){
-                    var ditem = this.findOneRGBDataByXY(dImgData,p);
-                    var mlast = this.findOneRGBDataByXY(cpImgData,this.p(i,j-0));
-                    var sum = RGBpx.add(ditem,mlast);
+                    var addItem = this.findOneRGBDataByXY(dImgData,this.p(i,j+yr));
+                    var minusItem = this.findOneRGBDataByXY(dImgData,this.p(i,j-yr-1));
+                    var mlast = this.findOneRGBDataByXY(cpImgData,this.p(i,j-1));
+
+                    var sum = mlast;
+                    if(addItem){
+                        sum = RGBpx.add(addItem,mlast);
+                    }
+                    if(minusItem){
+                        sum = RGBpx.minus(sum,minusItem);
+                    }
                     this.setOneRGBDataByXY(cpImgData,p,sum);
                 }else{
-                    var ditem = this.findOneRGBDataByXY(dImgData,p);
+                    var addItem = this.findOneRGBDataByXY(dImgData,this.p(i+xr,j));
+                    var minusItem = this.findOneRGBDataByXY(dImgData,this.p(i-xr-1,j));
+                    //这里错了 明天改
                     var mlast = this.findOneRGBDataByXY(cpImgData,this.p(i-1,j));
-                    //console.log(p);
-                    //console.log(ditem);
-                    var sum = RGBpx.add(ditem,mlast);
+                    var sum = mlast;
+                    if(addItem){
+                        sum = RGBpx.add(addItem,mlast);
+                    }
+                    if(minusItem){
+                        sum = RGBpx.minus(sum,minusItem);
+                    }
                     this.setOneRGBDataByXY(cpImgData,p,sum);
                 }
             }
@@ -222,12 +240,43 @@ var NomicOperation = CanvasOperation.extend({
         }
         return imgData1;
     },
-    _diviAllData:function(imgData,n){
+    _diviAllData:function(imgData,xr,yr){
         var data = imgData.rgbData;
-        for(var i=0;i<data.length;i++){
-            var itemData = data[i];
-            data[i]=RGBpx.divi(itemData,n);
+
+        var width = imgData.width;
+        var height = imgData.height;
+        for(var j=0;j<height;j++) {
+            for (var i = 0; i < width; i++) {
+                var p = this.p(i,j);
+                var nowRgb = this.findOneRGBDataByXY(imgData,p);
+                var beginX = i-xr;
+                var endX = i+xr;
+                var beginY = j-yr;
+                var endY = j+yr;
+                if(beginX<0){
+                    beginX=0;
+                }
+                if(endX>=width){
+                    endX=width-1;
+                }
+                if(beginY<0){
+                    beginY=0;
+                }
+                if(endY>=height){
+                    endY=height-1;
+                }
+                var n = (endX-beginX+1)*(endY-beginY+1);
+                var resutlRgb = RGBpx.divi(nowRgb,n);
+                this.setOneRGBDataByXY(imgData,p,resutlRgb);
+
+            }
         }
+
+
+        //for(var i=0;i<data.length;i++){
+        //    var itemData = data[i];
+        //    data[i]=RGBpx.divi(itemData,n);
+        //}
         return imgData;
     },
     _powData:function(imgData,n){
